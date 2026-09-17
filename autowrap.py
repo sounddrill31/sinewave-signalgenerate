@@ -1,83 +1,137 @@
-import sys, os, re
+import sys
+import os
+import re
+
+# This script is completely LLM generated
+
+def parse_argument(arg_str):
+    arg = arg_str.strip()
+    names = re.findall(r'\b[a-zA-Z_][a-zA-Z0-9_]*\b', arg)
+    if not names: return None
+    name = names[-1]
+    
+    is_const = 'const' in arg.split()
+    is_ptr = '*' in arg
+    is_array = '[' in arg
+    is_emx = "emxArray" in arg
+    
+    # Inputs are passed by value or const. Outputs are mutable pointers.
+    is_input = is_const or (not is_ptr and not is_array)
+    
+    if is_emx: 
+        return {'type': 'array_in_emx' if is_input else 'array_out_emx', 'name': name}
+    
+    array_match = re.search(r'\[\s*(\d+)\s*\]', arg)
+    if array_match: 
+        return {'type': 'array_in_fixed' if is_input else 'array_out_fixed', 'name': name, 'size': int(array_match.group(1))}
+    
+    if is_ptr: 
+        return {'type': 'array_in_ptr' if is_input else 'scalar_out_ptr', 'name': name}
+        
+    return {'type': 'scalar_in', 'name': name}
 
 def generate_wrapper(func_name):
     header_path = f"input/{func_name}.h"
-    if not os.path.exists(header_path):
-        print(f"Error: Could not find {header_path}")
-        sys.exit(1)
+    with open(header_path, 'r') as f: content = f.read()
 
-    with open(header_path, 'r') as f:
-        content = f.read()
+    match = re.search(fr"extern\s+void\s+{func_name}\s*\((.*?)\);", content, re.DOTALL)
+    args = [a.strip() for a in match.group(1).split(',') if a.strip()]
+    parsed_args = [parse_argument(arg) for arg in args if arg]
 
-    # Find the main function signature
-    match = re.search(fr"extern void {func_name}\((.*?)\);", content, re.DOTALL)
-    if not match:
-        print("Could not find function signature!")
-        sys.exit(1)
-
-    args = [arg.strip() for arg in match.group(1).split(',')]
-    
-    inputs = []
-    array_outputs = []
-    scalar_outputs = []
-
-    for arg in args:
-        if "emxArray_real_T *" in arg:
-            array_outputs.append(arg.split('*')[1].strip())
-        elif "double *" in arg:
-            scalar_outputs.append(arg.split('*')[1].strip())
-        elif "double " in arg:
-            inputs.append(arg.split('double ')[1].strip())
-
-    # Build the C++ wrapper
-    cpp = f"""
-#include <emscripten/bind.h>
+    cpp = f"""#include <emscripten/bind.h>
 #include <emscripten/val.h>
-#include "input/{func_name}.h"
-#include "input/{func_name}_emxAPI.h"
+#include <vector>
+#include <algorithm>
+#include "{header_path}"
+"""
+    for h in [f"input/{func_name}_emxAPI.h", f"input/{func_name}_emxutil.h"]:
+        if os.path.exists(h): cpp += f'#include "{h}"\n'
 
+    cpp += f"""
 using namespace emscripten;
 
-val run_{func_name}({', '.join([f"double {i}" for i in inputs])}) {{
+extern "C" {{
+    void omp_init_nest_lock(void*) {{}}
+    void omp_destroy_nest_lock(void*) {{}}
+    void omp_set_nest_lock(void*) {{}}
+    void omp_unset_nest_lock(void*) {{}}
+    int omp_get_num_threads() {{ return 1; }}
+    int omp_get_max_threads() {{ return 1; }}
+    int omp_get_thread_num() {{ return 0; }}
+    void {func_name}_initialize();
+}}
 """
-    # Initialize arrays and scalars
-    for arr in array_outputs:
-        cpp += f"    emxArray_real_T *{arr} = emxCreateND_real_T(1, 0);\n"
-    for scl in scalar_outputs:
-        cpp += f"    double {scl} = 0;\n"
+    
+    inputs = [p for p in parsed_args if 'in' in p['type']]
+    js_args = [f"double {p['name']}" if p['type'] == 'scalar_in' else f"const val &{p['name']}_js" for p in inputs]
+        
+    cpp += f"val run_{func_name}({', '.join(js_args)}) {{\n"
+    cpp += f"    static bool is_initialized = false;\n"
+    cpp += f"    if (!is_initialized) {{ {func_name}_initialize(); is_initialized = true; }}\n"
+    
+    call_args, emx_destroys = [], []
 
-    # Call MATLAB function
-    call_args = inputs + [f"{arr}" for arr in array_outputs] + [f"&{scl}" for scl in scalar_outputs]
-    cpp += f"\n    {func_name}({', '.join(call_args)});\n\n"
+    for p in parsed_args:
+        name, p_type = p['name'], p['type']
+        if p_type == 'scalar_in':
+            call_args.append(name)
+        elif p_type == 'array_in_emx':
+            cpp += f"    size_t {name}_len = {name}_js[\"length\"].as<size_t>();\n"
+            cpp += f"    int {name}_sz[2] = {{ 1, (int){name}_len }};\n"
+            cpp += f"    emxArray_real_T *{name} = emxCreateND_real_T(2, {name}_sz);\n"
+            cpp += f"    if ({name}_len > 0) {{\n"
+            cpp += f"        val {name}_view = val(typed_memory_view({name}_len, {name}->data));\n"
+            cpp += f"        {name}_view.call<void>(\"set\", {name}_js);\n"
+            cpp += f"    }}\n"
+            call_args.append(name)
+            emx_destroys.append(f"    emxDestroyArray_real_T({name});\n")
+        elif p_type in ('array_in_fixed', 'array_in_ptr'):
+            size = p.get('size', 944640)
+            cpp += f"    std::vector<double> {name}_buf({size}, 0.0);\n"
+            cpp += f"    size_t {name}_js_len = {name}_js[\"length\"].as<size_t>();\n"
+            cpp += f"    size_t {name}_copy_len = std::min((size_t){size}, {name}_js_len);\n"
+            cpp += f"    if ({name}_copy_len > 0) {{\n"
+            cpp += f"        val {name}_view = val(typed_memory_view({name}_copy_len, {name}_buf.data()));\n"
+            cpp += f"        {name}_view.call<void>(\"set\", {name}_js);\n"
+            cpp += f"    }}\n"
+            call_args.append(f"{name}_buf.data()")
+        elif p_type == 'array_out_emx':
+            cpp += f"    emxArray_real_T *{name};\n    emxInitArray_real_T(&{name}, 2);\n"
+            call_args.append(name)
+            emx_destroys.append(f"    emxDestroyArray_real_T({name});\n")
+        elif p_type in ('array_out_fixed', 'array_out_ptr'):
+            size = p.get('size', 944640)
+            cpp += f"    std::vector<double> {name}_buf({size}, 0.0);\n"
+            call_args.append(f"{name}_buf.data()")
+        elif p_type == 'scalar_out_ptr':
+            cpp += f"    double {name}_val = 0.0;\n"
+            call_args.append(f"&{name}_val")
 
-    # Convert to JS Float64Arrays
-    for arr in array_outputs:
-        cpp += f"    val {arr}_view = val(typed_memory_view({arr}->size[0] * {arr}->size[1], {arr}->data));\n"
-        cpp += f"    val {arr}_js = val::global(\"Float64Array\").new_({arr}_view);\n"
-        cpp += f"    emxDestroyArray_real_T({arr});\n"
+    cpp += f"\n    {func_name}({', '.join(call_args)});\n    val result = val::object();\n"
 
-    # Bundle JS Object
-    cpp += "\n    val result = val::object();\n"
-    for arr in array_outputs:
-        cpp += f"    result.set(\"{arr}\", {arr}_js);\n"
-    for scl in scalar_outputs:
-        cpp += f"    result.set(\"{scl}\", {scl});\n"
+    for p in [x for x in parsed_args if 'out' in x['type']]:
+        name, p_type = p['name'], p['type']
+        if p_type in ('array_out_fixed', 'array_out_ptr'):
+            size = p.get('size', 944640)
+            cpp += f"    val {name}_view = val(typed_memory_view({size}, {name}_buf.data()));\n"
+            cpp += f"    result.set(\"{name}\", val::global(\"Float64Array\").new_({name}_view));\n"
+        elif p_type == 'array_out_emx':
+            cpp += f"    int {name}_numels = 1;\n"
+            cpp += f"    for (int i = 0; i < {name}->numDimensions; ++i) {name}_numels *= {name}->size[i];\n"
+            cpp += f"    if ({name}_numels > 0) {{\n"
+            cpp += f"        val {name}_view = val(typed_memory_view({name}_numels, {name}->data));\n"
+            cpp += f"        result.set(\"{name}\", val::global(\"Float64Array\").new_({name}_view));\n"
+            cpp += f"    }} else result.set(\"{name}\", val::global(\"Float64Array\").new_(0));\n"
+        elif p_type == 'scalar_out_ptr':
+            cpp += f"    result.set(\"{name}\", {name}_val);\n"
 
-    cpp += """
-    return result;
-}
+    for d in emx_destroys: cpp += d
+    cpp += "\n    return result;\n}\n\nEMSCRIPTEN_BINDINGS(my_module) {\n"
+    cpp += f"    function(\"{func_name}\", &run_{func_name});\n}}\n"
 
-EMSCRIPTEN_BINDINGS(my_module) {
-"""
-    cpp += f"    function(\"{func_name}\", &run_{func_name});\n"
-    cpp += "}\n"
-
-    with open("wrapper.cpp", 'w') as f:
-        f.write(cpp)
-    print(f"Successfully generated wrapper.cpp for {func_name}!")
+    with open("wrapper.cpp", 'w') as f: f.write(cpp)
+    print(f"Successfully generated adaptive wrapper.cpp for {func_name}!")
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Usage: python autowrap.py <FunctionName>")
-    else:
-        generate_wrapper(sys.argv[1])
+    if len(sys.argv) < 2: print("Usage: python autowrap.py <FunctionName>")
+    else: generate_wrapper(sys.argv[1].strip())
