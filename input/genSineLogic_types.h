@@ -1,12 +1,12 @@
 /*
- * File: genTriangleLogic_types.h
+ * File: genSineLogic_types.h
  *
  * MATLAB Coder version            : 26.1
- * C/C++ source code generated on  : 30-Aug-2026 22:16:07
+ * C/C++ source code generated on  : 15-Sep-2026 22:32:13
  */
 
-#ifndef GENTRIANGLELOGIC_TYPES_H
-#define GENTRIANGLELOGIC_TYPES_H
+#ifndef GENSINELOGIC_TYPES_H
+#define GENSINELOGIC_TYPES_H
 
 /* Include Files */
 #include "rtwtypes.h"
@@ -29,7 +29,7 @@ typedef struct emxArray_real_T emxArray_real_T;
 
 #endif
 /*
- * File trailer for genTriangleLogic_types.h
+ * File trailer for genSineLogic_types.h
  *
  * [EOF]
  */

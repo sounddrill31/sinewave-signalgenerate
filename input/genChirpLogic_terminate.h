@@ -1,15 +1,14 @@
 /*
- * File: sawtooth.h
+ * File: genChirpLogic_terminate.h
  *
  * MATLAB Coder version            : 26.1
- * C/C++ source code generated on  : 30-Aug-2026 22:16:07
+ * C/C++ source code generated on  : 17-Sep-2026 09:12:10
  */
 
-#ifndef SAWTOOTH_H
-#define SAWTOOTH_H
+#ifndef GENCHIRPLOGIC_TERMINATE_H
+#define GENCHIRPLOGIC_TERMINATE_H
 
 /* Include Files */
-#include "genTriangleLogic_types.h"
 #include "rtwtypes.h"
 #include <stddef.h>
 #include <stdlib.h>
@@ -19,7 +18,7 @@ extern "C" {
 #endif
 
 /* Function Declarations */
-void sawtooth(const emxArray_real_T *t, emxArray_real_T *y);
+extern void genChirpLogic_terminate(void);
 
 #ifdef __cplusplus
 }
@@ -27,7 +26,7 @@ void sawtooth(const emxArray_real_T *t, emxArray_real_T *y);
 
 #endif
 /*
- * File trailer for sawtooth.h
+ * File trailer for genChirpLogic_terminate.h
  *
  * [EOF]
  */

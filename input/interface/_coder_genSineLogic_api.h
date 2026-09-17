@@ -1,12 +1,12 @@
 /*
- * File: _coder_genTriangleLogic_api.h
+ * File: _coder_genSineLogic_api.h
  *
  * MATLAB Coder version            : 26.1
- * C/C++ source code generated on  : 30-Aug-2026 22:16:07
+ * C/C++ source code generated on  : 15-Sep-2026 22:32:13
  */
 
-#ifndef _CODER_GENTRIANGLELOGIC_API_H
-#define _CODER_GENTRIANGLELOGIC_API_H
+#ifndef _CODER_GENSINELOGIC_API_H
+#define _CODER_GENSINELOGIC_API_H
 
 /* Include Files */
 #include "emlrt.h"
@@ -39,22 +39,22 @@ extern "C" {
 #endif
 
 /* Function Declarations */
-void genTriangleLogic(real_T A, real_T f, real_T duration, real_T Fs,
-                      emxArray_real_T *t, emxArray_real_T *x, real_T *samples,
-                      real_T *cycles);
+void genSineLogic(real_T A, real_T f, real_T duration, real_T Fs,
+                  emxArray_real_T *t, emxArray_real_T *x, real_T *samples,
+                  real_T *cycles);
 
-void genTriangleLogic_api(const mxArray *const prhs[4], int32_T nlhs,
-                          const mxArray *plhs[4]);
+void genSineLogic_api(const mxArray *const prhs[4], int32_T nlhs,
+                      const mxArray *plhs[4]);
 
-void genTriangleLogic_atexit(void);
+void genSineLogic_atexit(void);
 
-void genTriangleLogic_initialize(void);
+void genSineLogic_initialize(void);
 
-void genTriangleLogic_terminate(void);
+void genSineLogic_terminate(void);
 
-void genTriangleLogic_xil_shutdown(void);
+void genSineLogic_xil_shutdown(void);
 
-void genTriangleLogic_xil_terminate(void);
+void genSineLogic_xil_terminate(void);
 
 #ifdef __cplusplus
 }
@@ -62,7 +62,7 @@ void genTriangleLogic_xil_terminate(void);
 
 #endif
 /*
- * File trailer for _coder_genTriangleLogic_api.h
+ * File trailer for _coder_genSineLogic_api.h
  *
  * [EOF]
  */

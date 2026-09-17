@@ -2,7 +2,7 @@
  * File: main.h
  *
  * MATLAB Coder version            : 26.1
- * C/C++ source code generated on  : 30-Aug-2026 22:16:07
+ * C/C++ source code generated on  : 15-Sep-2026 22:32:13
  */
 
 /*************************************************************************/
@@ -45,7 +45,7 @@ extern "C" {
 /* Function Declarations */
 extern int main(int argc, char **argv);
 
-extern void main_genTriangleLogic(void);
+extern void main_genSineLogic(void);
 
 #ifdef __cplusplus
 }

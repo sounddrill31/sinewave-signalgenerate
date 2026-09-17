@@ -2,7 +2,7 @@
  * File: main.c
  *
  * MATLAB Coder version            : 26.1
- * C/C++ source code generated on  : 30-Aug-2026 22:16:07
+ * C/C++ source code generated on  : 15-Sep-2026 22:32:13
  */
 
 /*************************************************************************/
@@ -32,11 +32,11 @@
 
 /* Include Files */
 #include "main.h"
-#include "genTriangleLogic.h"
-#include "genTriangleLogic_emxAPI.h"
-#include "genTriangleLogic_initialize.h"
-#include "genTriangleLogic_terminate.h"
-#include "genTriangleLogic_types.h"
+#include "genSineLogic.h"
+#include "genSineLogic_emxAPI.h"
+#include "genSineLogic_initialize.h"
+#include "genSineLogic_terminate.h"
+#include "genSineLogic_types.h"
 #include "rt_nonfinite.h"
 
 /* Function Declarations */
@@ -63,13 +63,13 @@ int main(int argc, char **argv)
   (void)argv;
   /* Initialize the application.
 You do not need to do this more than one time. */
-  genTriangleLogic_initialize();
+  genSineLogic_initialize();
   /* Invoke the entry-point functions.
 You can call entry-point functions multiple times. */
-  main_genTriangleLogic();
+  main_genSineLogic();
   /* Terminate the application.
 You do not need to do this more than one time. */
-  genTriangleLogic_terminate();
+  genSineLogic_terminate();
   return 0;
 }
 
@@ -77,19 +77,19 @@ You do not need to do this more than one time. */
  * Arguments    : void
  * Return Type  : void
  */
-void main_genTriangleLogic(void)
+void main_genSineLogic(void)
 {
   emxArray_real_T *t;
   emxArray_real_T *x;
   double A_tmp;
   double cycles;
   double samples;
-  /* Initialize function 'genTriangleLogic' input arguments. */
+  /* Initialize function 'genSineLogic' input arguments. */
   A_tmp = argInit_real_T();
-  /* Call the entry-point 'genTriangleLogic'. */
+  /* Call the entry-point 'genSineLogic'. */
   emxInitArray_real_T(&t, 2);
   emxInitArray_real_T(&x, 2);
-  genTriangleLogic(A_tmp, A_tmp, A_tmp, A_tmp, t, x, &samples, &cycles);
+  genSineLogic(A_tmp, A_tmp, A_tmp, A_tmp, t, x, &samples, &cycles);
   emxDestroyArray_real_T(t);
   emxDestroyArray_real_T(x);
 }

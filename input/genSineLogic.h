@@ -1,12 +1,12 @@
 /*
- * File: minOrMax.h
+ * File: genSineLogic.h
  *
  * MATLAB Coder version            : 26.1
  * C/C++ source code generated on  : 15-Sep-2026 22:32:13
  */
 
-#ifndef MINORMAX_H
-#define MINORMAX_H
+#ifndef GENSINELOGIC_H
+#define GENSINELOGIC_H
 
 /* Include Files */
 #include "genSineLogic_types.h"
@@ -19,7 +19,9 @@ extern "C" {
 #endif
 
 /* Function Declarations */
-double maximum(const emxArray_real_T *x);
+extern void genSineLogic(double A, double f, double duration, double Fs,
+                         emxArray_real_T *t, emxArray_real_T *x,
+                         double *samples, double *cycles);
 
 #ifdef __cplusplus
 }
@@ -27,7 +29,7 @@ double maximum(const emxArray_real_T *x);
 
 #endif
 /*
- * File trailer for minOrMax.h
+ * File trailer for genSineLogic.h
  *
  * [EOF]
  */

@@ -1,15 +1,14 @@
 /*
- * File: minOrMax.h
+ * File: genChirpLogic_initialize.h
  *
  * MATLAB Coder version            : 26.1
- * C/C++ source code generated on  : 15-Sep-2026 22:32:13
+ * C/C++ source code generated on  : 17-Sep-2026 09:12:10
  */
 
-#ifndef MINORMAX_H
-#define MINORMAX_H
+#ifndef GENCHIRPLOGIC_INITIALIZE_H
+#define GENCHIRPLOGIC_INITIALIZE_H
 
 /* Include Files */
-#include "genSineLogic_types.h"
 #include "rtwtypes.h"
 #include <stddef.h>
 #include <stdlib.h>
@@ -19,7 +18,7 @@ extern "C" {
 #endif
 
 /* Function Declarations */
-double maximum(const emxArray_real_T *x);
+extern void genChirpLogic_initialize(void);
 
 #ifdef __cplusplus
 }
@@ -27,7 +26,7 @@ double maximum(const emxArray_real_T *x);
 
 #endif
 /*
- * File trailer for minOrMax.h
+ * File trailer for genChirpLogic_initialize.h
  *
  * [EOF]
  */

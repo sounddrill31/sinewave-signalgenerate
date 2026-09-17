@@ -1,12 +1,12 @@
 /*
- * File: _coder_genTriangleLogic_mex.h
+ * File: _coder_genSineLogic_mex.h
  *
  * MATLAB Coder version            : 26.1
- * C/C++ source code generated on  : 30-Aug-2026 22:16:07
+ * C/C++ source code generated on  : 15-Sep-2026 22:32:13
  */
 
-#ifndef _CODER_GENTRIANGLELOGIC_MEX_H
-#define _CODER_GENTRIANGLELOGIC_MEX_H
+#ifndef _CODER_GENSINELOGIC_MEX_H
+#define _CODER_GENSINELOGIC_MEX_H
 
 /* Include Files */
 #include "emlrt.h"
@@ -23,8 +23,8 @@ MEXFUNCTION_LINKAGE void mexFunction(int32_T nlhs, mxArray *plhs[],
 
 emlrtCTX mexFunctionCreateRootTLS(void);
 
-void unsafe_genTriangleLogic_mexFunction(int32_T nlhs, mxArray *plhs[4],
-                                         int32_T nrhs, const mxArray *prhs[4]);
+void unsafe_genSineLogic_mexFunction(int32_T nlhs, mxArray *plhs[4],
+                                     int32_T nrhs, const mxArray *prhs[4]);
 
 #ifdef __cplusplus
 }
@@ -32,7 +32,7 @@ void unsafe_genTriangleLogic_mexFunction(int32_T nlhs, mxArray *plhs[4],
 
 #endif
 /*
- * File trailer for _coder_genTriangleLogic_mex.h
+ * File trailer for _coder_genSineLogic_mex.h
  *
  * [EOF]
  */

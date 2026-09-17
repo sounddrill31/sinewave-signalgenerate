@@ -1,13 +1,13 @@
 /*
- * File: genTriangleLogic_emxutil.c
+ * File: genChirpLogic_emxutil.c
  *
  * MATLAB Coder version            : 26.1
- * C/C++ source code generated on  : 30-Aug-2026 22:16:07
+ * C/C++ source code generated on  : 17-Sep-2026 09:12:10
  */
 
 /* Include Files */
-#include "genTriangleLogic_emxutil.h"
-#include "genTriangleLogic_types.h"
+#include "genChirpLogic_emxutil.h"
+#include "genChirpLogic_types.h"
 #include "rt_nonfinite.h"
 #include <stdlib.h>
 #include <string.h>
@@ -94,7 +94,7 @@ void emxInit_real_T(emxArray_real_T **pEmxArray, int numDimensions)
 }
 
 /*
- * File trailer for genTriangleLogic_emxutil.c
+ * File trailer for genChirpLogic_emxutil.c
  *
  * [EOF]
  */

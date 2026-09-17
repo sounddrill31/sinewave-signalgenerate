@@ -2,13 +2,13 @@
  * File: abs.c
  *
  * MATLAB Coder version            : 26.1
- * C/C++ source code generated on  : 30-Aug-2026 22:16:07
+ * C/C++ source code generated on  : 15-Sep-2026 22:32:13
  */
 
 /* Include Files */
 #include "abs.h"
-#include "genTriangleLogic_emxutil.h"
-#include "genTriangleLogic_types.h"
+#include "genSineLogic_emxutil.h"
+#include "genSineLogic_types.h"
 #include "rt_nonfinite.h"
 #include <math.h>
 

@@ -1,14 +1,14 @@
 /*
- * File: genTriangleLogic_emxAPI.c
+ * File: genSineLogic_emxAPI.c
  *
  * MATLAB Coder version            : 26.1
- * C/C++ source code generated on  : 30-Aug-2026 22:16:07
+ * C/C++ source code generated on  : 15-Sep-2026 22:32:13
  */
 
 /* Include Files */
-#include "genTriangleLogic_emxAPI.h"
-#include "genTriangleLogic_emxutil.h"
-#include "genTriangleLogic_types.h"
+#include "genSineLogic_emxAPI.h"
+#include "genSineLogic_emxutil.h"
+#include "genSineLogic_types.h"
 #include "rt_nonfinite.h"
 #include <stdlib.h>
 
@@ -117,7 +117,7 @@ void emxInitArray_real_T(emxArray_real_T **pEmxArray, int numDimensions)
 }
 
 /*
- * File trailer for genTriangleLogic_emxAPI.c
+ * File trailer for genSineLogic_emxAPI.c
  *
  * [EOF]
  */

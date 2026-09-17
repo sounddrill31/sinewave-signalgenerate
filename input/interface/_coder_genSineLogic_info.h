@@ -1,25 +1,22 @@
 /*
- * File: minOrMax.h
+ * File: _coder_genSineLogic_info.h
  *
  * MATLAB Coder version            : 26.1
  * C/C++ source code generated on  : 15-Sep-2026 22:32:13
  */
 
-#ifndef MINORMAX_H
-#define MINORMAX_H
+#ifndef _CODER_GENSINELOGIC_INFO_H
+#define _CODER_GENSINELOGIC_INFO_H
 
 /* Include Files */
-#include "genSineLogic_types.h"
-#include "rtwtypes.h"
-#include <stddef.h>
-#include <stdlib.h>
+#include "mex.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 /* Function Declarations */
-double maximum(const emxArray_real_T *x);
+MEXFUNCTION_LINKAGE mxArray *emlrtMexFcnProperties(void);
 
 #ifdef __cplusplus
 }
@@ -27,7 +24,7 @@ double maximum(const emxArray_real_T *x);
 
 #endif
 /*
- * File trailer for minOrMax.h
+ * File trailer for _coder_genSineLogic_info.h
  *
  * [EOF]
  */

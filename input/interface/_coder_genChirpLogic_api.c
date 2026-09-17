@@ -1,13 +1,13 @@
 /*
- * File: _coder_genTriangleLogic_api.c
+ * File: _coder_genChirpLogic_api.c
  *
  * MATLAB Coder version            : 26.1
- * C/C++ source code generated on  : 30-Aug-2026 22:16:07
+ * C/C++ source code generated on  : 17-Sep-2026 09:12:10
  */
 
 /* Include Files */
-#include "_coder_genTriangleLogic_api.h"
-#include "_coder_genTriangleLogic_mex.h"
+#include "_coder_genChirpLogic_api.h"
+#include "_coder_genChirpLogic_mex.h"
 
 /* Variable Definitions */
 emlrtCTX emlrtRootTLSGlobal = NULL;
@@ -17,7 +17,7 @@ emlrtContext emlrtContextGlobal = {
     false,                                                /* bInitialized */
     131690U,                                              /* fVersionInfo */
     NULL,                                                 /* fErrorFunction */
-    "genTriangleLogic",                                   /* fFunctionName */
+    "genChirpLogic",                                      /* fFunctionName */
     NULL,                                                 /* fRTCallStack */
     false,                                                /* bDebugMode */
     {2045744189U, 2170104910U, 2743257031U, 4284093946U}, /* fSigWrd */
@@ -188,13 +188,13 @@ static void emxInit_real_T(const emlrtStack *sp, emxArray_real_T **pEmxArray)
 }
 
 /*
- * Arguments    : const mxArray * const prhs[4]
+ * Arguments    : const mxArray * const prhs[5]
  *                int32_T nlhs
  *                const mxArray *plhs[4]
  * Return Type  : void
  */
-void genTriangleLogic_api(const mxArray *const prhs[4], int32_T nlhs,
-                          const mxArray *plhs[4])
+void genChirpLogic_api(const mxArray *const prhs[5], int32_T nlhs,
+                       const mxArray *plhs[4])
 {
   emlrtStack st = {
       NULL, /* site */
@@ -207,19 +207,21 @@ void genTriangleLogic_api(const mxArray *const prhs[4], int32_T nlhs,
   real_T Fs;
   real_T cycles;
   real_T duration;
-  real_T f;
+  real_T fEnd;
+  real_T fStart;
   real_T samples;
   st.tls = emlrtRootTLSGlobal;
   emlrtHeapReferenceStackEnterFcnR2012b(&st);
   /* Marshall function inputs */
   A = emlrt_marshallIn(&st, emlrtAliasP(prhs[0]), "A");
-  f = emlrt_marshallIn(&st, emlrtAliasP(prhs[1]), "f");
-  duration = emlrt_marshallIn(&st, emlrtAliasP(prhs[2]), "duration");
-  Fs = emlrt_marshallIn(&st, emlrtAliasP(prhs[3]), "Fs");
+  fStart = emlrt_marshallIn(&st, emlrtAliasP(prhs[1]), "fStart");
+  fEnd = emlrt_marshallIn(&st, emlrtAliasP(prhs[2]), "fEnd");
+  duration = emlrt_marshallIn(&st, emlrtAliasP(prhs[3]), "duration");
+  Fs = emlrt_marshallIn(&st, emlrtAliasP(prhs[4]), "Fs");
   /* Invoke the target function */
   emxInit_real_T(&st, &t);
   emxInit_real_T(&st, &x);
-  genTriangleLogic(A, f, duration, Fs, t, x, &samples, &cycles);
+  genChirpLogic(A, fStart, fEnd, duration, Fs, t, x, &samples, &cycles);
   /* Marshall function outputs */
   plhs[0] = emlrt_marshallOut(t);
   emxFree_real_T(&st, &t);
@@ -240,7 +242,7 @@ void genTriangleLogic_api(const mxArray *const prhs[4], int32_T nlhs,
  * Arguments    : void
  * Return Type  : void
  */
-void genTriangleLogic_atexit(void)
+void genChirpLogic_atexit(void)
 {
   emlrtStack st = {
       NULL, /* site */
@@ -253,8 +255,8 @@ void genTriangleLogic_atexit(void)
       &st, false, NULL, (void *)&emlrtExitTimeCleanupDtorFcn, NULL, NULL, NULL);
   emlrtEnterRtStackR2012b(&st);
   emlrtDestroyRootTLS(&emlrtRootTLSGlobal);
-  genTriangleLogic_xil_terminate();
-  genTriangleLogic_xil_shutdown();
+  genChirpLogic_xil_terminate();
+  genChirpLogic_xil_shutdown();
   emlrtExitTimeCleanup(&emlrtContextGlobal);
 }
 
@@ -262,7 +264,7 @@ void genTriangleLogic_atexit(void)
  * Arguments    : void
  * Return Type  : void
  */
-void genTriangleLogic_initialize(void)
+void genChirpLogic_initialize(void)
 {
   emlrtStack st = {
       NULL, /* site */
@@ -280,13 +282,13 @@ void genTriangleLogic_initialize(void)
  * Arguments    : void
  * Return Type  : void
  */
-void genTriangleLogic_terminate(void)
+void genChirpLogic_terminate(void)
 {
   emlrtDestroyRootTLS(&emlrtRootTLSGlobal);
 }
 
 /*
- * File trailer for _coder_genTriangleLogic_api.c
+ * File trailer for _coder_genChirpLogic_api.c
  *
  * [EOF]
  */
